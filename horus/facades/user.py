@@ -1,4 +1,7 @@
-from ..exceptions import AuthenticationFailure
+from ..exceptions import (
+    AuthenticationException,
+    UserExistsException
+)
 
 
 class UserFacade(object):
@@ -10,13 +13,35 @@ class UserFacade(object):
     def __init__(self, service):
         self.service = service
 
-    def authenticate_user(self, username, password):
+    def authenticate(self, username, password):
+        """
+        Retrieves a user from the data store and verifies
+        the password matches.
+        """
+        #TODO: Check if the user is activated?
         user = self.service.get_user(username)
 
         if (
             user is None or
             user.password != password
         ):
-            raise AuthenticationFailure()
+            raise AuthenticationException()
+
+        return user
+
+    def register(self, username, password, email=None):
+        """
+        Will create a user in the database
+        """
+        user = self.service.get_user(username)
+
+        if user is not None:
+            raise UserExistsException()
+
+        user = self.service.create_user(
+            username,
+            password,
+            email
+        )
 
         return user
