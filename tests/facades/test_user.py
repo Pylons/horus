@@ -7,13 +7,14 @@ from zope.interface import implements
 class UserImpl(object):
     implements(IUser)
 
-    def __init__(self, login):
+    def __init__(self, login, password):
         self.login = login
+        self.password = password
 
 
 class TestUserFacade(object):
-    def _makeUser(self, login):
-        return UserImpl(login)
+    def _make_user(self, login, password):
+        return UserImpl(login, password)
 
     @pytest.mark.unit
     def test_authenticate_good_user(self):
@@ -21,7 +22,7 @@ class TestUserFacade(object):
 
         def get_user(login):
             if login == 'sontek':
-                return self._makeUser(login)
+                return self._make_user(login, 'drowssap')
             else:
                 return None
 
@@ -40,7 +41,7 @@ class TestUserFacade(object):
 
         def get_user(login):
             if login == 'sontek':
-                return self._makeUser(login)
+                return self._make_user(login, 'drowssap')
             else:
                 return None
 
@@ -50,4 +51,18 @@ class TestUserFacade(object):
 
         with pytest.raises(AuthenticationFailure):
             f.authenticate_user('fred', 'drowssap')
+
+    @pytest.mark.unit
+    def test_authenticate_bad_password(self):
+        from horus.facades.user import UserFacade
+        from horus.exceptions import AuthenticationFailure
+
+        user = self._make_user('sontek', 'drowssap')
+        s = mock.Mock()
+        s.get_user.return_value = user
+
+        f = UserFacade(s)
+
+        with pytest.raises(AuthenticationFailure):
+            f.authenticate_user('fred', 'drowssap1')
 

@@ -13,7 +13,10 @@ class UserFacade(object):
     def authenticate_user(self, username, password):
         user = self.service.get_user(username)
 
-        if user is None:
+        if (
+            user is None or
+            user.password != password
+        ):
             raise AuthenticationFailure()
 
         return user
