@@ -10,6 +10,8 @@
 .tox/
 nosetests.xml
 coverage.xml
+env/
+venv/
 env26/
 env25/
 env24/
@@ -26,3 +28,4 @@ lib/
 local
 coverage
 test
+junit.xml
