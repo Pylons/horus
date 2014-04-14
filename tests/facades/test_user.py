@@ -1,42 +1,53 @@
 import pytest
 import mock
+from horus.interfaces import IUser
+from zope.interface import implements
 
 
-@pytest.mark.unit
-def test_authenticate_good_user():
-    from horus.facades.user import UserFacade
-    from horus.models import User
+class UserImpl(object):
+    implements(IUser)
 
-    def get_user(username):
-        if username == 'sontek':
-            return User(username)
-        else:
-            return None
-
-    s = mock.Mock()
-    s.get_user = get_user
-    f = UserFacade(s)
-
-    result = f.authenticate_user('sontek', 'drowssap')
-
-    assert result is not None
+    def __init__(self, login):
+        self.login = login
 
 
-@pytest.mark.unit
-def test_authenticate_bad_user():
-    from horus.facades.user import UserFacade
-    from horus.models import User
-    from horus.exceptions import AuthenticationFailure
+class TestUserFacade(object):
+    def _makeUser(self, login):
+        return UserImpl(login)
 
-    def get_user(username):
-        if username == 'sontek':
-            return User(username)
-        else:
-            return None
+    @pytest.mark.unit
+    def test_authenticate_good_user(self):
+        from horus.facades.user import UserFacade
 
-    s = mock.Mock()
-    s.get_user = get_user
-    f = UserFacade(s)
+        def get_user(login):
+            if login == 'sontek':
+                return self._makeUser(login)
+            else:
+                return None
 
-    with pytest.raises(AuthenticationFailure):
-        f.authenticate_user('fred', 'drowssap')
+        s = mock.Mock()
+        s.get_user = get_user
+        f = UserFacade(s)
+
+        result = f.authenticate_user('sontek', 'drowssap')
+
+        assert result is not None
+
+    @pytest.mark.unit
+    def test_authenticate_bad_user(self):
+        from horus.facades.user import UserFacade
+        from horus.exceptions import AuthenticationFailure
+
+        def get_user(login):
+            if login == 'sontek':
+                return self._makeUser(login)
+            else:
+                return None
+
+        s = mock.Mock()
+        s.get_user = get_user
+        f = UserFacade(s)
+
+        with pytest.raises(AuthenticationFailure):
+            f.authenticate_user('fred', 'drowssap')
+

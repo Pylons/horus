@@ -33,6 +33,7 @@ except:
 
 requires = [
     'pyramid',
+    'zope.interface',
 ]
 
 testing_extras = ['pytest', 'pytest-cov', 'coverage', 'mock']
