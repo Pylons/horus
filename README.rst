@@ -42,3 +42,29 @@ connecting to a data store (postgres, zodb, solr) and returning the result set.
 
 Mapping functions from database rows to model classes should be done here.
 
+Example Configuration
+=====================
+
+.. code-block:: ini
+
+    pyramid.includes = horus
+
+    horus.backend = horus.backends.sqla
+    horus.backend.sqlalchemy_url = postgresql://
+
+    horus.flows =
+      local
+      fb
+
+    local.impl = horus.flows.local
+    local.
+
+    fb.impl = horus.flows.facebook
+    fb.access_token = 
+    fb.
+
+.. code-block:: python
+
+    config.override_assets(
+      to_override='horus.flows.local:templates/',
+      override_with='myapp.templates/')
