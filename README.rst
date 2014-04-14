@@ -1,11 +1,17 @@
 Getting Started
 =================================
 
-.. code-block:: python
+.. code-block::
 
     $ git clone git@github.com:Pylons/horus.git
     $ cd horus
     $ pip install -e .
+
+If you would like to run the tests you should run:
+
+.. code-block::
+
+   $ pip install -e .[testing]
 
 
 Design Decisions
