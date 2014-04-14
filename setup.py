@@ -35,7 +35,7 @@ requires = [
     'pyramid',
 ]
 
-testing_extras = ['pytest', 'pytest-cov', 'coverage']
+testing_extras = ['pytest', 'pytest-cov', 'coverage', 'mock']
 docs_extras = ['Sphinx']
 
 setupkw = dict(
