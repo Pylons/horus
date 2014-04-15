@@ -43,7 +43,20 @@ connecting to a data store (postgres, zodb, mongodb) and returning the result se
 
 Mapping functions from database rows to model classes should be done here.
 
+Flows
+------------------------------------
+Flows represent a type of authentication that will include a specific set of services.
 
+*local*
+The local flow represents that standard form workflow where you present a username/password
+form that authenticates the user from a database.
+
+The local flow includes things like registration and e-mail verification.
+
+*ldap*
+The ldap flow will authenticate against an LDAP server, no registration or activation is required.
+
+ 
 Example Configuration
 =====================
 

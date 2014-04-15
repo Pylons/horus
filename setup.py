@@ -32,16 +32,18 @@ except:
     CHANGES = ''
 
 requires = [
+    'cryptacular',
     'pyramid',
     'zope.interface',
 ]
 
 testing_extras = ['pytest', 'pytest-cov', 'coverage', 'mock']
 docs_extras = ['Sphinx']
+sqla_extras = ['sqlalchemy']
 
 setupkw = dict(
     name='horus',
-    version='0.0.1',
+    version='2.0.0',
     description='Pyramid authentication and registration system',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
@@ -67,6 +69,7 @@ setupkw = dict(
     extras_require={
         'testing': testing_extras,
         'docs': docs_extras,
+        'sqla': sqla_extras,
     },
 )
 

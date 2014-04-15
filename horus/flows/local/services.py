@@ -28,13 +28,6 @@ class AuthenticationService(object):
 
         return user
 
-    def logout(self, login):
-        """
-        There is nothing to do for logout on the service side other than log
-        that the user did leave.
-        """
-        pass
-
 
 class RegisterService(object):
     def __init__(self, backend):
