@@ -1,25 +1,24 @@
-from ..exceptions import (
+from horus.exceptions import (
     AuthenticationException,
     UserExistsException
 )
 
 
-class UserService(object):
-    """
-    UserFacade is used to manage all the business logic for
-    authentication and registration of users. It uses an
-    `IUserService` class to interface with the persistence layer.
-    """
+class AuthenticationService(object):
     def __init__(self, backend):
-        self.service = service
+        self.backend = backend
 
-    def authenticate(self, username, password):
+    def login(self, login, password):
         """
-        Retrieves a user from the data store and verifies
-        the password matches.
+        Authenticates the user by their login property and password.
+
+        Will raise an `AuthenticationException` if the username or password
+        are not found.
         """
         #TODO: Check if the user is activated?
-        user = self.service.get_user(username)
+        #TODO: Add a database log of authentication attempts
+        #TODO: Prevent multiple attempts from same IP
+        user = self.backend.get_user(login)
 
         if (
             user is None or
@@ -29,19 +28,32 @@ class UserService(object):
 
         return user
 
-    def register(self, username, password, email=None):
+    def logout(self, login):
+        """
+        There is nothing to do for logout on the service side other than log
+        that the user did leave.
+        """
+        pass
+
+
+class RegisterService(object):
+    def __init__(self, backend):
+        self.backend = backend
+
+    def create_user(self, login, password=None, email=None):
         """
         Will create a user in the database
         """
-        user = self.service.get_user(username)
+        user = self.backend.get_user(login)
 
         if user is not None:
             raise UserExistsException()
 
-        user = self.service.create_user(
-            username,
+        user = self.backend.create_user(
+            login,
             password,
             email
         )
 
         return user
+

@@ -26,6 +26,6 @@
 /include/
 /lib/
 /local
-/coverage
 /test
-/junit.xml
+.coverage
+junit.xml
