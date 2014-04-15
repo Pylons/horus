@@ -56,4 +56,3 @@ class RegisterService(object):
         )
 
         return user
-
