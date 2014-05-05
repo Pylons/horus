@@ -1,12 +1,9 @@
+from bcrypt import gensalt, hashpw
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import hybrid_property
-from horus.utils.text import generate_random_string
 from horus.interfaces import IUser
 from zope.interface import implements
-from cryptacular import bcrypt
 import sqlalchemy as sa
-
-crypt = bcrypt.BCRYPTPasswordManager()
 
 
 class BaseMixin(object):
@@ -38,12 +35,12 @@ class UserMixin(BaseMixin):
     @declared_attr
     def salt(self):
         """ Password salt for user """
-        return sa.Column(sa.Unicode(256), nullable=True)
+        return sa.Column(sa.Binary(29), nullable=True)
 
     @declared_attr
     def _password(self):
         """ Password hash for user object """
-        return sa.Column('password', sa.Unicode(256), nullable=True)
+        return sa.Column('password', sa.Binary(60), nullable=True)
 
     @hybrid_property
     def password(self):
@@ -60,7 +57,7 @@ class UserMixin(BaseMixin):
         self._password = self._hash_password(raw_password)
 
     def _hash_password(self, password):
-        if not self.salt:
-            self.salt = generate_random_string(24)
+        if self.salt is None:
+            self.salt = gensalt(12)
 
-        return unicode(crypt.encode(password + self.salt))
+        return unicode(hashpw(password.encode('utf-8'), self.salt))
