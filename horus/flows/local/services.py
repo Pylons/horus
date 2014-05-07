@@ -4,6 +4,24 @@ from horus.exceptions import (
 )
 
 
+try:
+    from hmac import compare_digest as is_equal
+except ImportError:
+    def is_equal(lhs, rhs):
+        """Returns True if the two strings are equal, False otherwise.
+
+        The comparison is based on a common implementation found in Django.
+        This version avoids a short-circuit even for unequal lengths to reveal
+        as little as possible. It takes time proportional to the length of its
+        second argument.
+        """
+        result = 0 if len(lhs) == len(rhs) else 1
+        lhs = lhs.ljust(len(rhs))
+        for x, y in zip(lhs, rhs):
+            result |= ord(x) ^ ord(y)
+        return result == 0
+
+
 class AuthenticationService(object):
     def __init__(self, backend):
         self.backend = backend
@@ -22,7 +40,7 @@ class AuthenticationService(object):
 
         if (
             user is None or
-            user.password != password
+            is_equal(user.password, password) is False
         ):
             raise AuthenticationException()
 
