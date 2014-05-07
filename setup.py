@@ -32,7 +32,7 @@ except:
     CHANGES = ''
 
 requires = [
-    'cryptacular',
+    'bcrypt',
     'pyramid',
     'zope.interface',
 ]

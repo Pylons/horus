@@ -18,3 +18,9 @@ def test_user_class(db_session):
     db_session.flush()
     results = db_session.query(UserModel).all()
     assert results[0] == user
+
+
+@pytest.mark.sqla
+def test_user_class_hashes_password(db_session):
+    user = UserModel(username=u'tilgovi', password=u'seekrit')
+    assert user.password != u'seekrit'
