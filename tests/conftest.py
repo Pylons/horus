@@ -63,7 +63,7 @@ def pytest_runtest_setup(item):
 @pytest.fixture()
 def db_session(request):
     """
-    This will hande the db session to tests that declare session in
+    This will handle the db session to tests that declare session in
     their arguments
     """
     if 'sqla' in request.keywords:
